@@ -1,7 +1,7 @@
 import React from "react";
 import {
   View,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 
 import { createBottomTabNavigator, BottomTabBar } from "@react-navigation/bottom-tabs";
@@ -15,10 +15,25 @@ import {
 } from "../screens";
 
 import CategoryTabNavigator from "./CategoryTabNavigator";
+import FilterSelector from "../screens/FilterSelector";
+import Favorites from "../screens/Favorites";
+import Cart from "../screens/Cart";
+import Checkout from "../screens/Checkout";
+import PaymentMethods from "../screens/PaymentMethods";
+import ShippingAddress from "../screens/ShippingAddress";
+import AddressForm from "../screens/AddressForm";
+import Profile from "../screens/Profile";
+import Orders from "../screens/Orders";
+import OrderSummary from "../screens/OrderSummary";
+import Settings from "../screens/Settings";
+import ProcessingOrder from "../screens/ProcessingOrder";
+import Success from "../screens/Success";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 const BottomTab = createBottomTabNavigator();
 
-const TabBarCustomButton = ({accessibilityState, children, onPress}) => {
+const TabBarCustomButton = ({accessibilityState, children, onPress, ...props}) => {
+  // console.log(props);
   var isSelected = accessibilityState.selected;
   return (
     <TouchableOpacity
@@ -80,15 +95,33 @@ const BottomTabNavigator = () => {
       ></BottomTab.Screen>
       <BottomTab.Screen
         name="Wishlist"
-        component={Home}
+        component={FavoritesNavigator}
         options={{
           tabBarButton: (props) => <TabBarCustomButton {...props} />,
           tabBarIcon: ({ color }) => <Ionicons name="heart-outline" size={30} color={color} style={{ marginBottom: -3 }} />
         }}
       ></BottomTab.Screen> 
       <BottomTab.Screen
+        name="Cart"
+        component={BagNavigator}
+        options={(nav) => {
+          const currentRoute = getFocusedRouteNameFromRoute(nav.route);
+          let tabBarVisible = true;
+          if (currentRoute && currentRoute === "processing-order") {
+            tabBarVisible = false;
+          } else {
+            tabBarVisible = true;
+          }
+          return ({
+            tabBarVisible,
+            tabBarButton: (props) => <TabBarCustomButton {...props} />,
+            tabBarIcon: ({ color }) => <Ionicons name="cart-outline" size={30} color={color} style={{ marginBottom: -3 }} />
+          });
+        }}
+      ></BottomTab.Screen>
+      <BottomTab.Screen
         name="Settings"
-        component={SignIn}
+        component={ProfileNavigator}
         options={{
           tabBarButton: (props) => <TabBarCustomButton {...props} />,
           tabBarIcon: ({ color }) => <Ionicons name="settings-outline" size={30} color={color} style={{ marginBottom: -3 }} />
@@ -100,6 +133,10 @@ const BottomTabNavigator = () => {
 
 const HomeStackNavigator = createStackNavigator();
 const CategoryStackNavigator = createStackNavigator();
+const FilterStackNavigator = createStackNavigator();
+const FavoritesStackNavigator = createStackNavigator();
+const BagStackNavigator = createStackNavigator();
+const ProfileStackNavigator = createStackNavigator();
 
 function HomeNavigator() {
   return (
@@ -136,10 +173,114 @@ function CategoryNavigator() {
         component={CategoryType}
       />
       <CategoryStackNavigator.Screen
-        name="category-filters"
-        component={Filters}
+        name="filters"
+        component={filterNavigator}
       />
     </CategoryStackNavigator.Navigator>
+  );
+}
+
+function filterNavigator() {
+  return (
+    <FilterStackNavigator.Navigator
+      screenOptions={{ headerShown: false }}
+    >
+      <FilterStackNavigator.Screen 
+        name="filters-home"
+        component={Filters}
+      />
+      <FilterStackNavigator.Screen
+        name="filter-individual"
+        component={FilterSelector}
+      />
+    </FilterStackNavigator.Navigator>
+  );
+}
+
+function FavoritesNavigator() {
+  return (
+    <FavoritesStackNavigator.Navigator
+      screenOptions={{ headerShown: false }}
+    >
+      <FavoritesStackNavigator.Screen
+        name="favorites"
+        component={Favorites}
+      />
+    </FavoritesStackNavigator.Navigator>
+  );
+}
+
+function BagNavigator() {
+  return (
+    <BagStackNavigator.Navigator
+      screenOptions={{ headerShown: false }}
+    >
+      <BagStackNavigator.Screen
+        name="bag"
+        component={Cart}
+      />
+      <BagStackNavigator.Screen
+        name="checkout"
+        component={Checkout}
+      />
+      <BagStackNavigator.Screen
+        name="payment-methods"
+        component={PaymentMethods}
+      />
+      <BagStackNavigator.Screen
+        name="address"
+        component={ShippingAddress}
+      />
+      <BagStackNavigator.Screen
+        name="address-form"
+        component={AddressForm}
+      />
+       <BagStackNavigator.Screen
+        name="processing-order"
+        component={ProcessingOrder}
+      />
+      <BagStackNavigator.Screen
+        name="order-success"
+        component={Success}
+      />
+    </BagStackNavigator.Navigator>
+  );
+}
+
+function ProfileNavigator() {
+  return (
+    <ProfileStackNavigator.Navigator
+      screenOptions={{ headerShown: false }}
+    >
+      <ProfileStackNavigator.Screen
+        name="Settings"
+        component={Profile}
+      />
+      <ProfileStackNavigator.Screen
+        name="profile-settings"
+        component={Settings}
+      />
+      <ProfileStackNavigator.Screen
+        name="orders"
+        component={Orders}
+      />
+      <ProfileStackNavigator.Screen
+        name="order-summary"
+        component={OrderSummary}
+      />
+       <ProfileStackNavigator.Screen
+        name="address"
+        component={ShippingAddress}
+      />
+      <ProfileStackNavigator.Screen
+        name="payment-methods"
+        component={PaymentMethods}
+      />
+       <ProfileStackNavigator.Screen
+        name="address-form"
+        component={AddressForm}
+      />
+    </ProfileStackNavigator.Navigator>
   );
 }
 

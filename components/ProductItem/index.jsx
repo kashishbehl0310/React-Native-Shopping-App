@@ -8,22 +8,26 @@ import {
 
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect } from "react";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
-const ProductItem = ({ item, navigation }) => {
+const ProductItem = ({ item, navigation, width, onRemove }) => {
   const [selectedIndex, setSelectedIndex] = useState(null);
-  useEffect(() => {
-    console.log(selectedIndex);
-  }, [selectedIndex]);
   return (
     <View
       style={{
-        width: "48%",
-        marginBottom: 20
+        width: width ? "" : "48%",
+        marginBottom: width ? 0 : 20,
+        marginHorizontal: width ? 30 : 0,
       }}
     >
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("productScreen");
+          if (!onRemove) {
+            navigation.navigate("productScreen");
+          }
+        }}
+        style={{
+          position: "rekative"
         }}
       >
         <Image
@@ -33,6 +37,49 @@ const ProductItem = ({ item, navigation }) => {
             height: 194
           }}
         />
+        {
+          onRemove
+          ? <View
+            style={{
+              position: "absolute",
+              left: "86%",
+            }}
+          >
+            <TouchableHighlight
+              onPress={() => {
+                onRemove(item.id);
+              }}
+            >
+              <Ionicons
+                name={"close-outline"}
+                size={25}
+                color="#BDBDBD"
+              />
+            </TouchableHighlight>
+          </View>
+          : null
+        }
+        {
+          item.inStock === false
+          ? <View
+            style={{
+              position: "absolute",
+              top: "50%",
+              backgroundColor: "rgba(255, 255, 255, 0.6)",
+              paddingVertical: 16,
+              width: "100%",
+              alignItems: "center"
+            }}
+          >
+            <Text
+              style={{
+                color: "#333",
+                fontWeight: "600"
+              }}
+            >Sold Out</Text>
+          </View>
+          : null
+        }
       </TouchableOpacity>
       <View
         style={{
@@ -71,7 +118,7 @@ const ProductItem = ({ item, navigation }) => {
           color: "#828282"
         }}
       >
-        {item.company}
+        {item.company || item.brand}
       </Text>
       <Text
         style={{
@@ -83,6 +130,32 @@ const ProductItem = ({ item, navigation }) => {
       >
         {item.name}
       </Text>
+      {
+        item.size
+        ? <View
+          style={{
+            flexDirection: "row",
+            alignItems: "flex-end"
+          }}
+        >
+          <Text style={{
+            color: "#bdbdbd",
+            fontWeight: "600"
+          }}>
+            Size:
+          </Text>
+          <Text
+            style={{
+              color: "#333",
+              fontSize: 12,
+              marginLeft: 4
+            }}
+          >
+            {item.size}
+          </Text>
+        </View>
+        : null
+      }
     </View>
   );
 };

@@ -1,25 +1,18 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
-  Image,
-  Alert
+  Image
 } from "react-native";
 import { Input } from "../library";
 const google = require("../assets/images/google.png");
 const fb = require("../assets/images/fb.png");
 
-const SignIn = ({ navigation }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [nameErr, setNameErr] = useState(false);
-  const [passwordErr, setPasswordErr] = useState(false);
-  const [emailErr, setEmailErr] = useState(false);
+const Login = ({ navigation }) => {
   return (
     <SafeAreaView
       style={styles.container}
@@ -36,7 +29,7 @@ const SignIn = ({ navigation }) => {
             fontWeight: "800"
           }}
           >
-          Sign Up
+          Sign In
         </Text>
         <View
           style={{
@@ -44,38 +37,17 @@ const SignIn = ({ navigation }) => {
           }}
         >
           <Input
-            value={name}
-            label="Name"
-            onChange={(name) => {
-              setNameErr(false);
-              setName(name);
-            }}
-            errMessage={nameErr ? "Name is required" : ""}
-          />
-          <Input
             label="Email"
             styles={{
               marginTop: 8
             }}
-            value={email}
-            onChange={(email) => {
-              setEmailErr(false);
-              setEmail(email);
-            }}
-            errMessage={emailErr ? "Email is required" : ""}
           />
           <Input
-            value={password}
             label="Password"
             styles={{
               marginTop: 8
             }}
             password={true}
-            onChange={(password) => {
-              setPasswordErr(false);
-              setPassword(password);
-            }}
-            errMessage={passwordErr ? "Password is required" : ""}
           />
           <View
             style={{
@@ -91,7 +63,7 @@ const SignIn = ({ navigation }) => {
                 alignItems: "center"
               }}
               onPress={() => {
-                navigation.navigate("sign-in");
+                navigation.navigate("forgot-password");
               }}
             >
               <Text
@@ -102,7 +74,7 @@ const SignIn = ({ navigation }) => {
                   marginRight: 8
                 }}
               >
-                Already have an account?
+                Forgot Your Password?
               </Text>
               <Ionicons
                 name="arrow-forward-outline"
@@ -121,20 +93,7 @@ const SignIn = ({ navigation }) => {
               marginTop: 36
             }}
             onPress={() => {
-              if (name === "") {
-                setNameErr(true);
-              }
-              if (email === "") {
-                setEmailErr(true);
-              }
-              if (password === "") {
-                setPasswordErr(true);
-              }
-              if (name === "" || email === "" || password === "") {
-                alert("There are errors");
-              } else {
-                navigation.navigate("Home");
-              }
+              navigation.navigate("Home");
             }}
           >
             <Text
@@ -145,7 +104,7 @@ const SignIn = ({ navigation }) => {
                 fontSize: 18
               }}
             >
-              Sign Up
+              Login
             </Text>
           </TouchableOpacity>
         </View>
@@ -189,6 +148,9 @@ const SignIn = ({ navigation }) => {
             />
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Home");
+            }}
             style={{
               paddingVertical: 20,
               paddingHorizontal: 34,
@@ -196,9 +158,6 @@ const SignIn = ({ navigation }) => {
               borderWidth: 1,
               borderColor: "#f2f2f2",
               marginLeft: 16
-            }}
-            onPress={() => {
-              navigation.navigate("Home");
             }}
           >
             <Image
@@ -220,4 +179,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignIn;
+export default Login;

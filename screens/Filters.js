@@ -7,10 +7,19 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import FilterHeader from "../components/Filters/FilterHeader";
+import FilterListItem from "../components/Filters/FilterListItem";
 import SliderFilter from "../components/Filters/SliderFilter";
+import productFilters from "../data/filters";
 
 const Filters = (props) => {
   const { route } = props;
+
+  const {
+    initRoute,
+    category
+  } = route.params;
+
+
   return (
     <SafeAreaView>
       <FilterHeader
@@ -22,7 +31,19 @@ const Filters = (props) => {
           height: "95%"
         }}
       >
-        <SliderFilter />
+        <View style={{ backgroundColor: "#fff" }}>
+          <SliderFilter />
+          {
+            Object.keys(productFilters).map(filter => (
+              <FilterListItem
+                filter={filter}
+                category={category?.name}
+                navigation={props.navigation}
+                route={props.route}
+              />
+            ))
+          }
+        </View>
         <View
           style={{
             flexDirection: "row",

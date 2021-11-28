@@ -85,9 +85,14 @@ const FilterBar = (props) => {
       >
         <TouchableOpacity
           onPress={() => {
-            props.navigation.navigate('category-filters');
+            props.navigation.navigate('filters', {
+              screen: "filters-home",
+              params: {
+                category: props.category
+              }
+            });
           }}
-        style={styles.textStyles}>
+          style={styles.textStyles}>
           <Text>Filters</Text>
         </TouchableOpacity>
       </View>

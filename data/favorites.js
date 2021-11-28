@@ -13,44 +13,69 @@ const products = [
     name: "Graphic print t-shirt",
     brand: "Heron Peston",
     price: 200,
-    image: graphictee
+    image: graphictee,
+    inStock: true,
+    size: "XL" 
   },
   {
     id: 2,
     name: "Monogram Print Jacket",
     brand: "Gucci",
     price: 185,
-    image: printJacket
+    image: printJacket,
+    inStock: true,
+    size: "XS" 
   },
   {
     id: 3,
     name: "Graphic print t-shirt",
     brand: "Heron Peston",
     price: 200,
-    image: jacket
+    image: jacket,
+    inStock: true,
+    size: "S" 
   },
   {
     id: 4,
     name: "Monogram Print Jacket",
     brand: "Gucci",
     price: 185,
-    image: jacket2
+    image: jacket2,
+    inStock: true,
+    size: "XL" 
   },
   {
     id: 5,
     name: "Graphic print t-shirt",
     brand: "Heron Peston",
     price: 200,
-    image: jacket3
+    image: jacket3,
+    inStock: true,
+    size: "M"
   },
   {
     id: 6,
     name: "Monogram Print Jacket",
     brand: "Gucci",
     price: 185,
-    image: oversized
+    image: oversized,
+    inStock: false,
+    size: "L"
   },
-
+  {
+    id: 7,
+    name: "Graphic print t-shirt",
+    brand: "Heron Peston",
+    price: 200,
+    image: graphictee
+  },
+  {
+    id: 8,
+    name: "Monogram Print Jacket",
+    brand: "Gucci",
+    price: 185,
+    image: printJacket
+  },
 ];
 
 export default products;

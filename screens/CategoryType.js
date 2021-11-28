@@ -27,7 +27,6 @@ const CategoryType = (props) => {
   } = route.params;
 
   useEffect(() => {
-    console.log(productType[category.name.toLowerCase()].products);
     const p = productType[category.name.toLowerCase()];
     // console.log(p);
     setProducts(p.products);
@@ -36,7 +35,11 @@ const CategoryType = (props) => {
   return (
     <SafeAreaView>
       <CategoryPageHeader props={props} />
-      <FilterBar navigation={navigation}/>
+      <FilterBar
+        navigation={navigation}
+        category={category}
+        route={route}
+      />
       <View
         style={{
           justifyContent: "center",

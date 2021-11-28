@@ -1,17 +1,12 @@
 import React from "react";
 import {
-  View,
-  Text,
-  TouchableOpacity
+  View, Text, TouchableOpacity
 } from "react-native";
+import {
+  Ionicons
+} from "@expo/vector-icons";
 
-import { Ionicons } from "@expo/vector-icons";
-
-const FilterHeader = ({ props, name }) => {
-  const {
-    navigation,
-    route
-  } = props;
+const PageHeader = ({ navigation, title }) => {
   return (
     <View
       style={{
@@ -19,14 +14,14 @@ const FilterHeader = ({ props, name }) => {
         alignItems: "center",
         justifyContent: "flex-start",
         paddingHorizontal: 16,
-        borderBottomColor: "lightgrey",
+        paddingVertical: 10,
         borderBottomWidth: 1,
-        paddingBottom: 10,
+        borderBottomColor: "#eee"
       }}
     >
       <TouchableOpacity
         onPress={() => {
-          props.navigation.goBack();
+          navigation.goBack()
         }}
       >
         <Ionicons
@@ -49,14 +44,11 @@ const FilterHeader = ({ props, name }) => {
             color: "#333"
           }}
         >
-          {
-            name || "Filters"
-          }
+          {title}
         </Text>
       </View>
-      
     </View>
-  )
+  );
 }
 
-export default FilterHeader;
+export default PageHeader;
