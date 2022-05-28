@@ -1,16 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View, Text,
-  SafeAreaView,
-  Image,
   ScrollView
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 import productCategories from "../data/productCategoris";
+
 import CategoryTile from "../components/Categories/CategoryTile";
+import { fetchCategories } from "../redux/reducers";
 
 const Category = (props) => {
   const { route } = props;
+  const dispatch = useDispatch();
+  const handleFetchCategories = () => {
+    dispatch(fetchCategories());    
+  }
+  const {
+    categories,
+    error,
+    loading
+  } = useSelector(state => state.categories);
+
+  useEffect(() => {
+    handleFetchCategories();
+  }, [route]);
+
   return (
     <SafeAreaProvider
       style={{
@@ -50,6 +66,30 @@ const Category = (props) => {
             Up to 50% off
           </Text>
         </View>
+        {
+          loading
+            ? <Text>Loading</Text>
+            : <>
+              {
+                categories && categories.length > 0
+                  ? <>
+                    {
+                      categories.map(category => {
+                        return (
+                          <CategoryTile
+                            key={category}
+                            category={productCategories.find(p => p.name === category)}
+                            navigation={props.navigation}
+                            route={props.route}
+                          />
+                        )
+                      })
+                    }
+                  </>
+                  : null
+              }
+            </>
+        }
         {
           productCategories.map(category => {
             return (

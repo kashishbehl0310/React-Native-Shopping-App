@@ -28,10 +28,8 @@ const FilterSelector = (props) => {
   const [brandFilters, setBrandFilters] = useState([]);
 
   const handleCHeckboxSelect = (e) => {
-    console.log({e});
     let filterCopy = [...brandFilters];
     if (filterCopy.includes(e.value)) {
-      console.log("yes");
       // remove it
       filterCopy = filterCopy.filter(f => f !== e.value);
     } else {

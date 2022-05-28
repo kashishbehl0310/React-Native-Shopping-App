@@ -6,9 +6,9 @@ import {
   SliderBox
 } from "react-native-image-slider-box";
 
-const Slider = () => {
+const Slider = ({ img }) => {
   const images = [
-    require("../../assets/images/product_image/1.png"),
+    img || require("../../assets/images/product_image/1.png"),
     require("../../assets/images/product_image/2.png"),
     require("../../assets/images/product_image/3.png"),
     require("../../assets/images/product_image/4.png")

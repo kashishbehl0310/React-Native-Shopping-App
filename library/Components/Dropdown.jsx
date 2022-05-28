@@ -15,14 +15,18 @@ const Dropdown = ({
   list,
   title,
   textStyle,
-  dropdownStyle
+  dropdownStyle,
+  onChange,
+  value
 }) => {
   return (
     <View>
       <ModalDropdown
+        defaultIndex={2}
         options={list}
         dropdownStyle={{
           backgroundColor: "#f2f2f2",
+          minWidth: 150,
           ...style
         }}
         renderRow={(data) => (
@@ -39,24 +43,29 @@ const Dropdown = ({
                 fontWeight: "600"
               }}
             >
-              {data.title}
+               {data.title}
             </Text>
           </View>
         )}
-        dropdownStyle={{
-          backgroundColor: "#f2f2f2",
-          minWidth: 150
+        onSelect={(idx) => {
+          onChange(idx)
         }}
+        defaultValue={value}
       >
         <View
-          style={{
-            ...dropdownStyle
-          }}
+          style={[
+            dropdownStyle,
+            {
+              flexDirection: "row",
+              width: "100%",
+              justifyContent: "space-between"
+            }
+          ]}
         >
           <Text
             style={textStyle}
             >
-            {title}
+            {value || title}
           </Text>
           <View
             style={{

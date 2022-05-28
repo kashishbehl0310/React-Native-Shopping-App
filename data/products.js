@@ -9,42 +9,43 @@ import oversized from "../assets/images/oversizedshirt.png";
 
 const products = [
   {
-    id: 1,
+    id: 101,
     name: "Graphic print t-shirt",
     brand: "Heron Peston",
     price: 200,
-    image: graphictee
+    image: graphictee,
+    favorite_at: new Date()
   },
   {
-    id: 2,
+    id: 102,
     name: "Monogram Print Jacket",
     brand: "Gucci",
     price: 185,
     image: printJacket
   },
   {
-    id: 3,
+    id: 103,
     name: "Graphic print t-shirt",
     brand: "Heron Peston",
     price: 200,
     image: jacket
   },
   {
-    id: 4,
+    id: 104,
     name: "Monogram Print Jacket",
     brand: "Gucci",
     price: 185,
     image: jacket2
   },
   {
-    id: 5,
+    id: 105,
     name: "Graphic print t-shirt",
     brand: "Heron Peston",
     price: 200,
     image: jacket3
   },
   {
-    id: 6,
+    id: 106,
     name: "Monogram Print Jacket",
     brand: "Gucci",
     price: 185,

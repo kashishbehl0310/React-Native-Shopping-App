@@ -9,9 +9,17 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect } from "react";
 import { TouchableHighlight } from "react-native-gesture-handler";
+import { useDispatch } from "react-redux";
+import { addToFavorites } from "../../redux/reducers";
 
-const ProductItem = ({ item, navigation, width, onRemove }) => {
+const ProductItem = ({ item, navigation, width, onRemove, isFavorite }) => {
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const dispatch = useDispatch();
+
+  const handleAddToFavorite = (item) => {
+    dispatch(addToFavorites(item));
+  }
+
   return (
     <View
       style={{
@@ -23,11 +31,13 @@ const ProductItem = ({ item, navigation, width, onRemove }) => {
       <TouchableOpacity
         onPress={() => {
           if (!onRemove) {
-            navigation.navigate("productScreen");
+            navigation.navigate("productScreen", {
+              productId: item.id
+            });
           }
         }}
         style={{
-          position: "rekative"
+          position: "relative"
         }}
       >
         <Image
@@ -100,12 +110,11 @@ const ProductItem = ({ item, navigation, width, onRemove }) => {
         </Text>
         <TouchableOpacity
           onPress={() => {
-            console.log(item.id, " ", selectedIndex)
-            setSelectedIndex(item.id);
+            handleAddToFavorite(item);
           }}
         >
           <Ionicons
-            name={item.id === selectedIndex ? "heart" : "heart-outline"}
+            name={isFavorite ? "heart" : "heart-outline"}
             size={25}
             color="#FF8C00"
           />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -9,17 +9,44 @@ import {
   FlatList,
   ScrollView
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+
+import { fetchProducts, loadingProducts } from "../redux/reducers";
+import ProductItem from "../components/ProductItem";
+import ProductsLoader from "../components/ProductPage/ProductsLoader";
+
+import homeBanner from "../assets/images/homeBanner.png";
 
 const {
   width,
   height
 } = Dimensions.get("window");
 
-import homeBanner from "../assets/images/homeBanner.png";
-import data from "../data/products";
-import ProductItem from "../components/ProductItem";
 
 const Home = ({ navigation }) => {
+  const products = useSelector(state => state.products.products);
+  const favorites = useSelector(state => state.favorites.favorites);
+  console.log({
+    favorites
+  })
+  const loading = useSelector(state => state.products.isLoading);
+  const dispatch = useDispatch();
+
+  const fetchData = async () => {
+    try {
+      await dispatch(fetchProducts())
+    } catch (err) {
+      alert(err);
+    }
+  }
+
+  useEffect(() => {
+    dispatch(loadingProducts());
+    setTimeout(() => {
+      fetchData();
+    }, 3000);
+  }, []);
+
   return (
     <SafeAreaView
       style={styles.container}
@@ -98,23 +125,42 @@ const Home = ({ navigation }) => {
         <View
           style={styles.productsList}
         >
-          <FlatList
-            data={data}
-            keyExtractor={(item) => item.id}
-            numColumns={2}
-            columnWrapperStyle={{
-              justifyContent: "space-between"
-            }}
-            renderItem={({item}) => {
-              return (
-                <ProductItem
-                  key={item.id}
-                  item={item}
-                  navigation={navigation}
-                />
-              )
-            }}
-          />
+          {
+            loading
+            ? <View
+              style={{
+                flexWrap: "wrap",
+                flexDirection: "row",
+                justifyContent: "space-between"
+              }}
+              >
+                  {
+                    [1,2,3,4].map(s => (
+                      <ProductsLoader key={s} />
+                    ))
+                  }
+              </View>
+            : <>
+              <FlatList
+                data={products}
+                keyExtractor={(item) => item.id}
+                numColumns={2}
+                columnWrapperStyle={{
+                  justifyContent: "space-between"
+                }}
+                renderItem={({item}) => {
+                  return (
+                    <ProductItem
+                      key={item.id}
+                      item={item}
+                      navigation={navigation}
+                      isFavorite={favorites.filter(f => f.id === item.id).length > 0}
+                    />
+                  )
+                }}
+              />
+            </>
+          }
         </View>
       </ScrollView>
     </SafeAreaView>
