@@ -2,6 +2,7 @@ import React from "react";
 import {
   View,
   TouchableOpacity,
+  Text
 } from "react-native";
 
 import { createBottomTabNavigator, BottomTabBar } from "@react-navigation/bottom-tabs";
@@ -29,6 +30,7 @@ import Settings from "../screens/Settings";
 import ProcessingOrder from "../screens/ProcessingOrder";
 import Success from "../screens/Success";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -41,7 +43,8 @@ const TabBarCustomButton = ({accessibilityState, children, onPress, ...props}) =
         flex: 1,
         height: 60,
         borderTopColor: isSelected ? "#ff8c00" : "#fff",
-        borderTopWidth: "4px"
+        borderTopWidth: "4px",
+        position: "relative"
       }}
       activeOpacity={1}
       onPress={onPress}>
@@ -69,6 +72,7 @@ const CustomTabBar = (props) => {
 };
 
 const BottomTabNavigator = () => {
+  const cart = useSelector(state => state.cart);
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
@@ -114,8 +118,35 @@ const BottomTabNavigator = () => {
           }
           return ({
             tabBarVisible,
-            tabBarButton: (props) => <TabBarCustomButton {...props} />,
-            tabBarIcon: ({ color }) => <Ionicons name="cart-outline" size={30} color={color} style={{ marginBottom: -3 }} />
+            tabBarButton: (props) => <TabBarCustomButton {...props}></TabBarCustomButton>,
+            tabBarIcon: ({ color }) => (
+              <View>
+                <Ionicons name="cart-outline" size={30} color={color} style={{ marginBottom: -3 }} />
+                {
+                  cart && cart.cartQuantity > 0
+                  ? <View
+                    style={{
+                      position: "absolute",
+                      backgroundColor: "red",
+                      width: 20,
+                      height: 20,
+                      borderRadius: "50%",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      right: -10,
+                      top: -10
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#fff"
+                      }}
+                    >{cart.cartQuantity}</Text>
+                  </View>
+                  : null
+                }                
+              </View>
+            )
           });
         }}
       ></BottomTab.Screen>

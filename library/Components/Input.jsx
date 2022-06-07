@@ -33,7 +33,7 @@ const Input = ({ label, styles, password, onChange, errMessage, ...props }) => {
           color: '#000',
           backgroundColor: "#f2f2f2",
           borderWidth: errMessage ? 1 : 0,
-          borderColor: errMessage ? "#f90000" : ""
+          borderColor: errMessage ? "#f90000" : "transparent"
         }}
         onFocus={() => {
           setIsFocused(true);

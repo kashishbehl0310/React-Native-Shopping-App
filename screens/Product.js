@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,12 @@ import {
 } from "../library";
 import ProductItem from "../components/ProductItem";
 import data from "../data/products";
+import { 
+  fetchSingleProduct,
+  addProductToCart
+} from "../redux/reducers";
+import { useDispatch, useSelector } from "react-redux";
+import copyObject from "../utils/copyObject";
 
 const styles = {
   dropdownStyle: {
@@ -26,11 +32,30 @@ const styles = {
     flexDirection: "row"
   },
   textStyle: {
-    color: "#333"
+    color: "#333",
+    textTransform: "capitalize"
   }
 }
 
 const Product = (props) => {
+  const {
+    route
+  } = props;
+
+  const product = useSelector(state => state.products.product);
+  const dispatch = useDispatch();
+  // const [color, setColor] = useState(colorList[0]);
+  // const [Size, setSize] = useState(sizeList[0]);
+
+  useEffect(() => {
+    if (route && route.params) {
+      const { productId } = route.params;
+      if (productId) {
+        dispatch(fetchSingleProduct(productId));
+      }
+    }
+  }, []);
+
   const colorList = [
     { title: "Black", value: "black" },
     {title: "White", value: "white"},
@@ -44,6 +69,24 @@ const Product = (props) => {
     {title: "L", value: "l"},
     {title: "XL", value: "xl"}
   ];
+
+  const [color, setColor] = useState();
+  const [size, setSize] = useState();
+
+  const handleAddProductToCart = () => {
+    if (!color) {
+      alert("Please Select Color");
+      return;
+    }
+    if (!size) {
+      alert("Please select size")
+      return;
+    }
+    const productCopy = copyObject(product);
+    productCopy.size = size.value;
+    productCopy.color = color.value;
+    dispatch(addProductToCart(productCopy))
+  }
 
   return (
     <SafeAreaView>
@@ -91,7 +134,7 @@ const Product = (props) => {
               </Text>
             </View>
           </View>
-          <Slider />
+          <Slider img={product && product.image} />
           {/* <Text>lahfaljflahl</Text> */}
           <View
             style={{
@@ -110,10 +153,14 @@ const Product = (props) => {
                 list={colorList}
                 title={"Select Color"}
                 style={{
-                  borderColor: "#484848"
+                  borderColor: "#484848",
                 }}
                 dropdownStyle={styles.dropdownStyle}
                 textStyle={styles.textStyle}
+                value={color && color.value}
+                onChange={(idx) => {
+                  setColor(colorList[idx])
+                }}
               />
               </View>
               <View
@@ -129,6 +176,10 @@ const Product = (props) => {
                 }}
                 dropdownStyle={styles.dropdownStyle}
                 textStyle={styles.textStyle}
+                value={size && size.value}
+                onChange={(idx) => {
+                  setSize(sizeList[idx])
+                }}
               />
               </View>
           </View>
@@ -221,6 +272,9 @@ const Product = (props) => {
                 paddingVertical: 10,
                 backgroundColor: "#FF8C00",
                 width: "85%"
+              }}
+              onPress={() => {
+                handleAddProductToCart();
               }}
             >
               <Text

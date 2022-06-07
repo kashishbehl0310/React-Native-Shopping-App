@@ -22,6 +22,26 @@ const productCategories = [
     id: 4,
     name: "Accessories",
     image: category4
+  },
+  {
+    id: 5,
+    name: "electronics",
+    image: category1
+  },
+  {
+    id: 6,
+    name: "jewelery",
+    image: category2
+  },
+  {
+    id: 7,
+    name: "men's clothing",
+    image: category3
+  },
+  {
+    id: 8,
+    name: "women's clothing",
+    image: category4
   }
 ];
 

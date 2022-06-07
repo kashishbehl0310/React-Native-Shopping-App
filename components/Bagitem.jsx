@@ -14,7 +14,7 @@ const DEMO_OPTIONS_2 = [
   {"title": "Delete", "value": "delete"},
 ];
 
-const Bagitem = ({ item, orderScreen }) => {
+const Bagitem = ({ item, orderScreen, handleOptionSelect }) => {
   return (
     <View
       style={{
@@ -112,6 +112,9 @@ const Bagitem = ({ item, orderScreen }) => {
           ? null
           : <ModalDropdown
             options={DEMO_OPTIONS_2}
+            onSelect={(idx) => {
+              handleOptionSelect(DEMO_OPTIONS_2[idx])
+            }}
             renderRow={(data) => (
               <View
                 style={{

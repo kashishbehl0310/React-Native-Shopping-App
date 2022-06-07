@@ -1,16 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View, Text, SafeAreaView, FlatList, ScrollView
 } from "react-native";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from "react-redux";
 // import { useState } from "react/cjs/react.development";
 
 import PageHeader from "../components/PageHeader";
 import ProductItem from "../components/ProductItem";
+import ProductsLoader from "../components/ProductPage/ProductsLoader";
 import favorites from "../data/favorites";
+import { favoritesLoading, fetchFavorites, removeFromFavorites } from "../redux/reducers";
 
 const Favorites = (props) => {
-  const [favoritesData, setFavorites] = useState(favorites);
+  // const [favoritesData, setFavorites] = useState(favorites);
+  const loading = useSelector(state => state.favorites.isLoading);
+  const favorites = useSelector(state => state.favorites.favorites);
+  const dispatch = useDispatch();
+
+  const fetchData = async () => {
+    try {
+      await dispatch(fetchFavorites())
+    } catch (err) {
+      alert(err);
+    }
+  }
+
+  const handleRemoveFromFavorites = (id) => {
+    dispatch(removeFromFavorites(id));
+  }
+
+  useEffect(() => {
+    dispatch(favoritesLoading());
+    setTimeout(() => {
+      fetchData();
+    }, 3000);
+  }, []);
+
   return (
     <SafeAreaView
     >
@@ -19,7 +45,7 @@ const Favorites = (props) => {
         title={"Favorites"}
       />
       {
-        favoritesData.length === 0
+        favorites.length === 0
         ? <View
           style={{
             alignItems: "center",
@@ -45,7 +71,7 @@ const Favorites = (props) => {
               fontWeight: "500"
             }}
           >
-            {favoritesData.length} Items
+            {favorites.length} Items
           </Text>
         </View>
         <ScrollView
@@ -54,34 +80,54 @@ const Favorites = (props) => {
           }}
         >
           {
-            favoritesData.length === 0
-            ? <View>
-                <Text>
-                  This Section is Empty
-                </Text>
+            loading
+            ? <View
+              style={{
+                flexWrap: "wrap",
+                flexDirection: "row",
+                justifyContent: "space-between"
+              }}
+            >
+              {
+                [1,2,3,4].map(s => (
+                  <ProductsLoader key={s} />
+                ))
+              }
             </View>
-            : <FlatList
-            data={favoritesData}
-            keyExtractor={(item) => item.id}
-            numColumns={2}
-            columnWrapperStyle={{
-              justifyContent: "space-between"
-            }}
-            renderItem={({item}) => {
-              return (
-                <ProductItem
-                  key={item.id}
-                  item={item}
-                  navigation={props.navigation}
-                  onRemove={(id) => {
-                    const favoritesCopy = [...favoritesData];
-                    const filteredFav = favoritesCopy.filter(item => item.id !== id);
-                    setFavorites(filteredFav);
+            : <View>
+              {
+                favorites.length === 0
+                ? <View>
+                    <Text>
+                      This Section is Empty
+                    </Text>
+                  </View>
+                  : <FlatList
+                  data={favorites}
+                  keyExtractor={(item) => item.id}
+                  numColumns={2}
+                  columnWrapperStyle={{
+                    justifyContent: "space-between"
+                  }}
+                  renderItem={({item}) => {
+                    return (
+                      <ProductItem
+                        key={item.id}
+                        item={item}
+                        navigation={props.navigation}
+                        isFavorite={true}
+                        onRemove={(id) => {
+                          handleRemoveFromFavorites(id);
+                          // const favoritesCopy = [...favorites];
+                          // const filteredFav = favoritesCopy.filter(item => item.id !== id);
+                          // setFavorites(filteredFav);
+                        }}
+                      />
+                    )
                   }}
                 />
-              )
-            }}
-          />
+              }
+            </View>
           }
         </ScrollView>
       </View>
